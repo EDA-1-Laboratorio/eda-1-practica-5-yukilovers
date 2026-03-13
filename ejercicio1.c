@@ -12,12 +12,15 @@
 // SECCIÓN 1: PRIMITIVAS DE LA PILA (A IMPLEMENTAR)
 // =========================================================
 
+
 // Funcion inicializar
 void inicializar(PILA *stk) {
     /* TODO: 
        1. Inicializar el contador de elementos (cnt) a 0.
        2. Inicializar el puntero al tope a NULL. 
     */
+    stk->cnt=0;
+    stk->tope=NULL;
 }
 
 // Funcion push
@@ -29,6 +32,13 @@ void push(PILA *stk, DATO x) {
        4. Actualizar el tope de la pila para que sea el nuevo elemento.
        5. Incrementar el contador (cnt).
     */
+    ELEMENTO *uno;
+    uno=malloc(sizeof(ELEMENTO));
+    uno->d=x;
+    uno->siguiente=stk->tope;
+    stk->tope=uno;
+    stk->cnt++;
+    
 }
 
 // Funcion pop
@@ -46,18 +56,35 @@ DATO pop(PILA *stk) {
        6. Liberar la memoria (free) del nodo temporal.
        7. Retornar el dato.
     */
+    DATO retorno;
+    ELEMENTO *temporal;
+    temporal = stk->tope;
+    retorno= stk->tope->d;
+    stk->tope=stk->tope->siguiente;
+    stk->cnt--;
+    free(temporal);
+    temporal=NULL;
+    return  retorno;
+    
 }
 
 // Funcion estavacia
 BOOLEAN estavacia(PILA *stk) {
     /* TODO: Retornar VERDADERO si el contador es 0, FALSO de lo contrario. */
-    return FALSE; 
+    if(stk->cnt==0){
+        return VERDADERO;
+    }
+    return FALSO;
 }
 
 // Funcion estallena
 BOOLEAN estallena(PILA *stk) {
     /* TODO: Retornar VERDADERO si el contador es igual a FULL. */
-    return FALSE;
+    if(stk->cnt==FULL){
+        
+        return VERDADERO;
+    }
+    return FALSO;
 }
 
 // =========================================================
