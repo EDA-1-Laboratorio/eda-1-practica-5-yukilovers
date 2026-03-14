@@ -103,44 +103,34 @@ int estavacia(PILA *stk) {
  * (o usar una estrategia de inversión total).
  */
 int esPalindromo(char cadena[]) {
-    PILA original, invertida;
-    inicializar(&original);
+    PILA invertida;
     inicializar(&invertida);
 
     int i, longitud = strlen(cadena);
+    char cadenaLimpia[100]; // Para guardar la frase sin espacios ni mayúsculas
+    int n = 0;
 
-    // 1. Filtrar y llenar la pila original
+    // 1. Limpiar la cadena y meter caracteres a la PILA
     for (i = 0; i < longitud; i++) {
-        if (isalpha(cadena[i])) { // Solo letras
+        if (isalpha(cadena[i])) {
             char letra = tolower(cadena[i]);
-            push(&original, letra);
+            cadenaLimpia[n++] = letra; // Guardamos el orden normal
+            push(&invertida, letra);    // Al meterlo a la pila, el primero en salir será el último
         }
     }
 
-    // 2. Crear la versión invertida
-    // TIP: Al pasar elementos de una pila a otra, el orden se invierte.
-    // Pero para comparar, necesitamos que una mantenga el orden original.
-    // ¿Cómo usarías las dos pilas para tener la cadena al derecho y al revés?
-    
-    for(i=longitud;i>=0;i--){
-        if(isalpha(cadena[i])){
-            char letra=tolower(cadena[i]);
-            push(&invertida,letra);
+    // 2. Comparar la cadena limpia contra la pila (que sale al revés)
+    for (i = 0; i < n; i++) {
+        // Sacamos el carácter del tope (que es el último de la frase original)
+        char letraInvertida = pop(&invertida); 
+        
+        // Comparamos con el carácter en la posición i (el primero de la frase)
+        if (cadenaLimpia[i] != letraInvertida) {
+            return 0; // En cuanto uno no coincida, no es palíndromo
         }
     }
-    
-    for(i=0;i<longitud;i++){
-        if(&original==&invertida){
-            pop(&original);
-            pop(&invertida);
-        }
-        else{
-            return 0;
-        }
-    }
-    /* TODO: Implementar lógica de comparación usando las dos pilas */
-    
-    return 1; // Retornar 1 si es palíndromo, 0 si no.
+
+    return 1; // Si terminó el ciclo, coinciden todos
 }
 
 int main() {
